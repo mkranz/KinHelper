@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using HtmlAgilityPack;
@@ -56,12 +57,14 @@ namespace KinHelper.Model.Parsers
         public void UpdateRoster(Kinship kinship)
         {
             var doc = UrlDocument.Get(kinship,"characters");
-            LoadRosterPage(kinship, doc);
+
+            var members = _context.Members.Include("Character").Where(x => x.Kinship.Id == kinship.Id).ToList();
+            LoadRosterPage(kinship, members, doc);
             var next = GetNextRosterPageUrl(doc);
             while (next != null)
             {
                 doc = UrlDocument.Get(kinship, next);
-                LoadRosterPage(kinship, doc);
+                LoadRosterPage(kinship, members, doc);
                 next = GetNextRosterPageUrl(doc);
             }
         }
@@ -77,7 +80,7 @@ namespace KinHelper.Model.Parsers
             return null;
         }
 
-        private void LoadRosterPage(Kinship kinship, HtmlDocument doc)
+        private void LoadRosterPage(Kinship kinship, List<KinshipMember> members, HtmlDocument doc)
         {
             var rows = doc.DocumentNode.SelectNodes("//div[@id='page_guildroster']/table[@id='groster_header']/tr[@class='clist_row']");
             foreach (var row in rows)
@@ -94,7 +97,7 @@ namespace KinHelper.Model.Parsers
                             var name = link.InnerText;
                             var url = link.GetAttributeValue("href", null);
 
-                            var existingCharacter = kinship.Roster.FirstOrDefault(x => x.Character.LotroId == lotroId);
+                            var existingCharacter = members.FirstOrDefault(x => x.Character.LotroId == lotroId);
                             if (existingCharacter != null)
                             {
                                 Console.WriteLine("Updating " + name);

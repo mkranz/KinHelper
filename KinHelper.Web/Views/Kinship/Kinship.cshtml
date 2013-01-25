@@ -1,4 +1,4 @@
-﻿@model KinHelper.Model.Entities.Kinship
+﻿@model KinHelper.Web.Controllers.RosterViewModel
 
 @{
     ViewBag.Title = Model.Name + " Roster";
@@ -29,14 +29,14 @@
         @{
             var even = true;
         }
-        @foreach (var userId in Model.Roster
+        @foreach (var userId in Model.Members
             .Where(x => x.Character.User != null)
             .OrderBy(x => x.Rank.Id)
             .ThenByDescending(x => x.Character.Level)
             .Select(x => x.Character.User.HiddenId)
             .Distinct())
         {
-            var characters = Model.Roster.Where(x => x.Character.User != null && x.Character.User.HiddenId == userId)
+            var characters = Model.Members.Where(x => x.Character.User != null && x.Character.User.HiddenId == userId)
                 .OrderBy(x => x.Rank.Id)
                 .ThenByDescending(x => x.Character.Level).ToList();
             var first = true;
@@ -54,7 +54,7 @@
             }
             even = !even;
         }
-        @foreach (var member in Model.Roster.Where(x => x.Character.User == null)
+        @foreach (var member in Model.Members.Where(x => x.Character.User == null)
             .OrderBy(x => x.Rank.Id)
             .ThenByDescending(x => x.Character.Level))
         {

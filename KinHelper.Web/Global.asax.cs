@@ -50,6 +50,7 @@ namespace KinHelper.Web
 
         private static void ConfigureDatabase()
         {
+            HibernatingRhinos.Profiler.Appender.EntityFramework.EntityFrameworkProfiler.Initialize();
             Database.SetInitializer(new CreateDatabaseIfNotExists<KinHelperContext>());
         }
     }

@@ -32,7 +32,15 @@ namespace KinHelper.Web.Controllers
         public ActionResult Kinship(int id)
         {
             var kinship = _context.Kinships.First(x => x.Id == id);
-            return View(kinship);
+
+            var members = _context.Members.Include("Character").Where(x => x.Kinship.Id == id).ToList();
+            
+            return View(new RosterViewModel()
+                            {
+                                Id = kinship.Id,
+                                Name = kinship.Name,
+                                Members = members
+                            });
         }
 
         [HttpGet]
@@ -90,8 +98,8 @@ namespace KinHelper.Web.Controllers
         public ActionResult LoadPlayers(int id)
         {
             var parser = new CharacterParser(_context);
-            var kinship = _context.Kinships.FirstOrDefault(x => x.Id == id);
-            var characters = kinship.Roster.Select(x => x.Character).Where(x => x.User == null).OrderBy(x => x.Name);
+
+            var characters = _context.Members.Include("Character").Where(x => x.Kinship.Id == id && x.Character.User == null).Select(x => x.Character).OrderBy(x => x.Name);
             foreach (var character in characters)
             {
                 parser.Update(character);
@@ -135,5 +143,11 @@ namespace KinHelper.Web.Controllers
     {
         public User User { get; set; }
         public List<KinshipMember> Members { get; set; }
+    }
+    public class RosterViewModel
+    {
+        public int Id { get; set; }
+        public string Name { get; set; }
+        public List<KinshipMember> Members { get; set; } 
     }
 }
