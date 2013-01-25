@@ -60,11 +60,11 @@ namespace KinHelper.Web
             configuration.ConnectionStrings.ConnectionStrings["KinHelperContext"].ConnectionString = connectionString;
             configuration.Save();
 
-
-            HibernatingRhinos.Profiler.Appender.EntityFramework.EntityFrameworkProfiler.Initialize();
 #if DEBUG
-            Database.SetInitializer(new CreateDatabaseIfNotExists<KinHelperContext>());
+            HibernatingRhinos.Profiler.Appender.EntityFramework.EntityFrameworkProfiler.Initialize();
 #endif
+            Database.SetInitializer(new CreateDatabaseIfNotExists<KinHelperContext>());
+
         }
     }
 }
