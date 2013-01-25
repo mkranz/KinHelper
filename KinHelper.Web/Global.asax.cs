@@ -50,7 +50,7 @@ namespace KinHelper.Web
 
         private static void ConfigureDatabase()
         {
-            Database.SetInitializer(new RepositoryInitializer());
+            Database.SetInitializer(new CreateDatabaseIfNotExists<KinHelperContext>());
         }
     }
 }
