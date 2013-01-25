@@ -68,5 +68,10 @@ namespace KinHelper.Model.Db
             }
             return user;
         }
+
+        protected override void OnModelCreating(DbModelBuilder modelBuilder)
+        {
+            Database.SetInitializer(new MigrateDatabaseToLatestVersion<KinHelperContext,Configuration>());
+        }
     }
 }
