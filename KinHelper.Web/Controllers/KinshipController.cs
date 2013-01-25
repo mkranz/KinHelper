@@ -76,9 +76,10 @@ namespace KinHelper.Web.Controllers
         {
             var parser = new CharacterParser(_context);
             var kinship = _context.Kinships.FirstOrDefault(x => x.Id == id);
-            foreach (var character in kinship.Roster)
+            var characters = kinship.Roster.Select(x => x.Character).Where(x => x.User == null && !x.HasNoPlayerPage).OrderBy(x => x.Name);
+            foreach (var character in characters)
             {
-                parser.Update(character.Character);
+                parser.Update(character);
                 _context.SaveChanges();
             }
             

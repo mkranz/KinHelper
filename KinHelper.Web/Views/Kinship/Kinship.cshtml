@@ -23,26 +23,40 @@
         </tr>
     </thead>
     <tbody>
-    @foreach (var userId in Model.Roster
-        .Where(x => x.Character.User != null)
-        .OrderBy(x => x.Rank.Id)
-        .ThenByDescending(x => x.Character.Level)
-        .Select(x => x.Character.User.HiddenId)
-        .Distinct())
-    {
-        foreach (var member in Model.Roster.Where(x => x.Character.User != null && x.Character.User.HiddenId == userId)
-            .OrderBy(x => x.Rank.Id)
-            .ThenByDescending(x => x.Character.Level))
-        {
-
-            @Html.Partial("RosterMember",member)
+        @{
+            var even = true;
         }
-    }
-    @foreach (var member in Model.Roster.Where(x => x.Character.User == null)
+        @foreach (var userId in Model.Roster
+            .Where(x => x.Character.User != null)
+            .OrderBy(x => x.Rank.Id)
+            .ThenByDescending(x => x.Character.Level)
+            .Select(x => x.Character.User.HiddenId)
+            .Distinct())
+        {
+            var characters = Model.Roster.Where(x => x.Character.User != null && x.Character.User.HiddenId == userId)
+                .OrderBy(x => x.Rank.Id)
+                .ThenByDescending(x => x.Character.Level).ToList();
+            var first = true;
+            foreach (var member in characters)
+            {
+                if (first)
+                {
+                    first = false;
+                    @Html.Partial("RosterMember", member, new ViewDataDictionary { { "Even", even },{"Span",characters.Count} })    
+                }
+                else
+                {
+                    @Html.Partial("RosterMember", member, new ViewDataDictionary { { "Even", even },{"Span", 0} })    
+                }
+            }
+            even = !even;
+        }
+        @foreach (var member in Model.Roster.Where(x => x.Character.User == null)
             .OrderBy(x => x.Rank.Id)
             .ThenByDescending(x => x.Character.Level))
         {
-            @Html.Partial("RosterMember", member)
+            @Html.Partial("RosterMember", member, new ViewDataDictionary { { "Even", even } })
+            even = !even;
         }
     </tbody>
 </table>

@@ -59,3 +59,11 @@ textarea {
 .validation-summary-valid {
     display: none;
 }
+
+.even {
+    background-color: #CCC
+}
+
+.odd {
+    background-color: #EEE
+}
