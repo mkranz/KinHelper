@@ -9,4 +9,12 @@
     <p>Enter the kinship Id. </p>
     @Html.EditorFor(x => x.KinshipId)
     <p>This is the number found in the URL of the my.lotro.com entry (eg. http://my.lotro.com/guild-868068838294616971/ - the kinship id is 868068838294616971)</p>
+    
+    <p>Alternatively, enter the server name and kinship name (exactly) in the fields below. If you do not know the exact name, try performing a kinship search on my.lotro.com</p>
+    <fieldset>
+        <div><label>Server:</label>@Html.EditorFor(x => x.Server)</div>
+        <div><label>Kinship Name:</label>@Html.EditorFor(x => x.Name)</div>
+    </fieldset>
+   
+    <input type="submit" value="Import"/>
 }

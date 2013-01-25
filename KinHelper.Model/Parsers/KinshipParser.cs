@@ -130,5 +130,13 @@ namespace KinHelper.Model.Parsers
                 }
             }
         }
+
+        public string GetKinshipId(string server, string name)
+        {
+            // http://my.lotro.com/kinship-crickhollow-asylum
+            var url = "http://my.lotro.com/kinship-" + server + "-" + name;
+            var redirect = UrlDocument.GetRedirectUrl(url);  // /guild-870320629166151452
+            return redirect.Replace("/guild-", String.Empty);
+        }
     }
 }   

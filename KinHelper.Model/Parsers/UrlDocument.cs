@@ -52,5 +52,13 @@ namespace KinHelper.Model.Parsers
                 //throw;
             }
         }
+
+        public static string GetRedirectUrl(string url)
+        {
+            var request = (HttpWebRequest) WebRequest.Create(url);
+            request.AllowAutoRedirect = false;
+            var response = request.GetResponse();
+            return response.Headers["Location"];
+        }
     }
 }

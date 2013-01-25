@@ -38,7 +38,10 @@ namespace KinHelper.Web.Controllers
         [HttpGet]
         public ActionResult Import()
         {
-            return View(new ImportViewModel());
+            return View(new ImportViewModel()
+                            {
+                                Server = "Crickhollow"
+                            });
         }
 
         [HttpPost]
@@ -46,17 +49,29 @@ namespace KinHelper.Web.Controllers
         public ActionResult Import(ImportViewModel viewModel)
         {
             var parser = new KinshipParser(_context);
-            var kinship = _context.Kinships.FirstOrDefault(x => x.LotroId == viewModel.KinshipId);
+
+            var kinshipId = viewModel.KinshipId;
+            if (viewModel.KinshipId == null)
+            {
+                if (viewModel.Name != null && viewModel.Server != null)
+                {
+                    kinshipId = parser.GetKinshipId(viewModel.Server, viewModel.Name);
+                }
+            }
+            if (kinshipId == null)
+                return View(viewModel);
+
+            var kinship = _context.Kinships.FirstOrDefault(x => x.LotroId == kinshipId);
             if (kinship == null)
             {
-                kinship = new Kinship() { LotroId = viewModel.KinshipId };
+                kinship = new Kinship() { LotroId = kinshipId };
                 _context.Kinships.Add(kinship);
             }
 
             parser.Update(kinship);
             _context.SaveChanges();
 
-            return RedirectToAction("Kinship", new { id = kinship.Id });
+            return RedirectToAction("Kinship","Kinship", new { id = kinship.Id });
         }
 
         [HttpGet]
