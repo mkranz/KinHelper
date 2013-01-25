@@ -99,7 +99,7 @@ namespace KinHelper.Web.Controllers
         {
             var parser = new CharacterParser(_context);
 
-            var characters = _context.Members.Include("Character").Where(x => x.Kinship.Id == id && x.Character.User == null).Select(x => x.Character).OrderBy(x => x.Name);
+            var characters = _context.Members.Include("Character").Where(x => x.Kinship.Id == id && x.Character.User == null).Select(x => x.Character).OrderBy(x => x.Name).ToList();
             foreach (var character in characters)
             {
                 parser.Update(character);
