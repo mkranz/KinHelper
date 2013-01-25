@@ -1,0 +1,12 @@
+﻿@model KinHelper.Web.Models.ImportViewModel
+
+@{
+    ViewBag.Title = "Import Kinship";
+}
+
+
+@using(Html.BeginForm("Import")) {
+    <p>Enter the kinship Id. </p>
+    @Html.EditorFor(x => x.KinshipId)
+    <p>This is the number found in the URL of the my.lotro.com entry (eg. http://my.lotro.com/guild-868068838294616971/ - the kinship id is 868068838294616971)</p>
+}

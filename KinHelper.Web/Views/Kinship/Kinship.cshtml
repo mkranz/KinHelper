@@ -1,0 +1,48 @@
+﻿@model KinHelper.Model.Entities.Kinship
+
+@{
+    ViewBag.Title = Model.Name + " Roster";
+}
+
+<h2>@Model.Name</h2>
+
+@Html.ActionLink("Refresh","RefreshRoster",new {id=Model.Id})
+
+@Html.ActionLink("Load Players","LoadPlayers",new {id=Model.Id})
+
+<table>
+    <thead>
+        <tr>
+            <th>User Id</th> 
+            <th>User Name</th> 
+            <th>Name</th> 
+            <th>Level</th> 
+            <th>Class</th> 
+            <th>Race</th> 
+            <th>Rank</th> 
+        </tr>
+    </thead>
+    <tbody>
+    @foreach (var userId in Model.Roster
+        .Where(x => x.Character.User != null)
+        .OrderBy(x => x.Rank.Id)
+        .ThenByDescending(x => x.Character.Level)
+        .Select(x => x.Character.User.HiddenId)
+        .Distinct())
+    {
+        foreach (var member in Model.Roster.Where(x => x.Character.User != null && x.Character.User.HiddenId == userId)
+            .OrderBy(x => x.Rank.Id)
+            .ThenByDescending(x => x.Character.Level))
+        {
+
+            @Html.Partial("RosterMember",member)
+        }
+    }
+    @foreach (var member in Model.Roster.Where(x => x.Character.User == null)
+            .OrderBy(x => x.Rank.Id)
+            .ThenByDescending(x => x.Character.Level))
+        {
+            @Html.Partial("RosterMember", member)
+        }
+    </tbody>
+</table>

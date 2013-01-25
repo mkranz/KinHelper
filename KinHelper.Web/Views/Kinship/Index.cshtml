@@ -1,0 +1,31 @@
+﻿@model List<KinHelper.Model.Entities.Kinship>
+
+@{
+    ViewBag.Title = "Kinships";
+}
+
+<h2>Kinships</h2>
+
+<table>
+    <thead>
+        <tr>
+            <th>Name</th> 
+            <th>Server</th> 
+            <th>Size</th> 
+            <th>Roster</th> 
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var kinship in Model)
+        {
+            <tr>
+                <td>@kinship.Name</td>
+                <td>@kinship.Server</td>
+                <td>@kinship.Size</td>
+                <td>@Html.ActionLink("View Roster","Kinship",new {id=kinship.Id})</td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+@Html.ActionLink("Import","Import")

@@ -1,0 +1,18 @@
+﻿@model KinHelper.Model.Entities.KinshipMember
+<tr>
+    @if (@Model.Character.User == null)
+    {
+        <td></td>
+        <td></td>
+    }
+    else
+    {
+        <td>@Model.Character.User.HiddenId</td>
+        <td>@Model.Character.User.Name</td>
+    }
+    <td>@Model.Character.Name</td>
+    <td>@Model.Character.Level</td>
+    <td>@Model.Character.Class</td>
+    <td>@Model.Character.Race</td>
+    <td>@Model.Rank</td>
+</tr>
