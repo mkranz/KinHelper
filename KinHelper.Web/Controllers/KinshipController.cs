@@ -85,5 +85,11 @@ namespace KinHelper.Web.Controllers
             
             return RedirectToAction("Kinship", new { id });
         }
+
+        public ActionResult CrossKinUsers()
+        {
+            //_context.Users.Where(x => _context.Characters.Any(y => y.User == x) && _context.Characters)
+            return null;
+        }
     }
 }

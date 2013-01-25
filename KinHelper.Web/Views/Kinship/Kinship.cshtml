@@ -55,7 +55,7 @@
             .OrderBy(x => x.Rank.Id)
             .ThenByDescending(x => x.Character.Level))
         {
-            @Html.Partial("RosterMember", member, new ViewDataDictionary { { "Even", even } })
+            @Html.Partial("RosterMember", member, new ViewDataDictionary { { "Even", even }, { "Span", 1 } })
             even = !even;
         }
     </tbody>
