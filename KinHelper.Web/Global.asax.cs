@@ -62,7 +62,9 @@ namespace KinHelper.Web
 
 
             HibernatingRhinos.Profiler.Appender.EntityFramework.EntityFrameworkProfiler.Initialize();
+#if DEBUG
             Database.SetInitializer(new CreateDatabaseIfNotExists<KinHelperContext>());
+#endif
         }
     }
 }
