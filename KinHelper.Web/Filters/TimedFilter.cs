@@ -16,7 +16,6 @@ namespace KinHelper.Web.Filters
         public override void OnActionExecuted(ActionExecutedContext filterContext)
         {
             _stopwatch.Stop();
-
             filterContext.Controller.TempData["TimeElapsedMilliseconds"] = _stopwatch.ElapsedMilliseconds;
             base.OnActionExecuted(filterContext);
         }
