@@ -10,7 +10,7 @@
 
 @Html.ActionLink("Load Users","LoadPlayers",new {id=Model.Id})
 
-@Html.ActionLink("Reload Users","ReloadPlayers",new {id=Model.Id})
+@Html.ActionLink("Reload Users", "LoadPlayers", new { id = Model.Id, reload=true })
 
 <table>
     <thead>

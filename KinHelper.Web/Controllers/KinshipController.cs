@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Threading;
 using System.Web;
 using System.Web.Mvc;
 using KinHelper.Model.Db;
@@ -12,7 +13,7 @@ using KinHelper.Web.Models;
 
 namespace KinHelper.Web.Controllers
 {
-    public class KinshipController : Controller
+    public class KinshipController : AsyncController
     {
         private readonly KinHelperContext _context;
         //
@@ -84,47 +85,75 @@ namespace KinHelper.Web.Controllers
 
         [HttpGet]
         [Timed]
-        public ActionResult RefreshRoster(int id)
+        public void RefreshRosterAsync(int id)
         {
-            var parser = new KinshipParser(_context);
-            var kinship = _context.Kinships.FirstOrDefault(x => x.Id == id);
-            parser.UpdateRoster(kinship);
-            _context.SaveChanges();
-            return RedirectToAction("Kinship", new { id});
-        }
-
-        [HttpGet]
-        [Timed]
-        public ActionResult LoadPlayers(int id)
-        {
-            var parser = new CharacterParser(_context);
-
-            var characters = _context.Members.Include("Character").Where(x => x.Kinship.Id == id && x.Character.User == null).Select(x => x.Character).OrderBy(x => x.Name).ToList();
-            foreach (var character in characters)
-            {
-                parser.Update(character);
-                _context.SaveChanges();
-            }
+            AsyncManager.OutstandingOperations.Increment();
+            AsyncManager.Parameters["id"] = id;
+            new Thread(() =>
+                           {
+                               try
+                               {
+                                   var context = new KinHelperContext();
+                                   var parser = new KinshipParser(context);
+                                   var kinship = context.Kinships.FirstOrDefault(x => x.Id == id);
+                                   parser.UpdateRoster(kinship);
+                                   context.SaveChanges();
+                               }
+                               finally
+                               {
+                                   AsyncManager.OutstandingOperations.Decrement();
+                               }
+                           })
+                {
+                    IsBackground = true
+                }.Start();
             
+        }
+
+        public ActionResult RefreshRosterCompleted(int id)
+        {
             return RedirectToAction("Kinship", new { id });
         }
 
         [HttpGet]
         [Timed]
-        public ActionResult ReloadPlayers(int id)
+        public void LoadPlayersAsync(int id, bool reload = false)
         {
-            var parser = new CharacterParser(_context);
-            var kinship = _context.Kinships.FirstOrDefault(x => x.Id == id);
-            var characters = kinship.Roster.Select(x => x.Character).OrderBy(x => x.Name);
-            foreach (var character in characters)
-            {
-                parser.Update(character);
-                _context.SaveChanges();
-            }
+            AsyncManager.OutstandingOperations.Increment();
+            AsyncManager.Parameters["id"] = id;
+            new Thread(() =>
+                           {
+                               try
+                               {
+                                   var parser = new CharacterParser(_context);
 
-            return RedirectToAction("Kinship", new { id });
+                                   var characterQuery =
+                                       _context.Members.Include("Character").Where(x => x.Kinship.Id == id);
+                                   if (!reload)
+                                   {
+                                       characterQuery = characterQuery.Where(x => x.Character.User == null);
+                                   }
+                                   var characters = characterQuery.Select(x => x.Character).OrderBy(x => x.Name).ToList();
+                                   foreach (var character in characters)
+                                   {
+                                       parser.Update(character);
+                                       _context.SaveChanges();
+                                   }
+                               }
+                               finally
+                               {
+                                   AsyncManager.OutstandingOperations.Decrement();
+                               }})
+                {
+                    IsBackground = true
+                }.Start();
         }
 
+        public ActionResult LoadPlayersCompleted(int id)
+        {
+            return RedirectToAction("Kinship", new { id });
+        }
+        
         public ActionResult CrossKinUsers()
         {
             var users = _context.Users.Where(
