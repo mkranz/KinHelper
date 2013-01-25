@@ -5,9 +5,11 @@ namespace KinHelper.Model.Entities
 
         public virtual int Id { get; set; }
         public virtual string LotroId { get; set; }
-        public virtual string Url { get { return "http://my.lotro.com/home/character/" + LotroId + "/"; } }
+        //public virtual string Url { get { return "http://my.lotro.com/home/character/" + LotroId + "/"; } }
+        public virtual string Url { get { return ScrapedUrl; } }
 
         public virtual string Name { get; set; }
+        public virtual string ScrapedUrl { get; set; }
 
         // character sheet informations?
         public virtual Race Race { get; set; }
@@ -19,6 +21,8 @@ namespace KinHelper.Model.Entities
 
         public virtual bool IsAnonymous { get; set; }
         public virtual bool HasNoPlayerPage { get; set; }
+
+        public virtual string LastActivityDateString { get; set; }
 
         public override string ToString()
         {

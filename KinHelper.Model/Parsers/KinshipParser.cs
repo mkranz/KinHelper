@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Data;
 using System.Linq;
 using HtmlAgilityPack;
 using KinHelper.Model.Db;
@@ -91,12 +92,15 @@ namespace KinHelper.Model.Parsers
                             var lotroId = pnote.Replace("star_", string.Empty);
                             var link = column.Element("div").Element("a");
                             var name = link.InnerText;
+                            var url = link.GetAttributeValue("href", null);
 
                             var existingCharacter = kinship.Roster.FirstOrDefault(x => x.Character.LotroId == lotroId);
                             if (existingCharacter != null)
                             {
                                 Console.WriteLine("Updating " + name);
                                 member = existingCharacter;
+                                _context.Entry(existingCharacter).State = EntityState.Modified;
+                                _context.Entry(existingCharacter.Character).State = EntityState.Modified;
                             }
                             else
                             {
@@ -111,6 +115,7 @@ namespace KinHelper.Model.Parsers
                                 _context.Characters.Add(member.Character);
                             }
 
+                            member.Character.ScrapedUrl = url;
                             member.Character.Name = name;
                             member.Character.LotroId = lotroId;
                             break;

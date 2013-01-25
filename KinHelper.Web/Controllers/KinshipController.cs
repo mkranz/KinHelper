@@ -101,6 +101,22 @@ namespace KinHelper.Web.Controllers
             return RedirectToAction("Kinship", new { id });
         }
 
+        [HttpGet]
+        [Timed]
+        public ActionResult ReloadPlayers(int id)
+        {
+            var parser = new CharacterParser(_context);
+            var kinship = _context.Kinships.FirstOrDefault(x => x.Id == id);
+            var characters = kinship.Roster.Select(x => x.Character).OrderBy(x => x.Name);
+            foreach (var character in characters)
+            {
+                parser.Update(character);
+                _context.SaveChanges();
+            }
+
+            return RedirectToAction("Kinship", new { id });
+        }
+
         public ActionResult CrossKinUsers()
         {
             var users = _context.Users.Where(

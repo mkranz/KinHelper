@@ -6,9 +6,11 @@
 
 <h2>@Model.Name</h2>
 
-@Html.ActionLink("Refresh","RefreshRoster",new {id=Model.Id})
+@Html.ActionLink("Update Roster","RefreshRoster",new {id=Model.Id})
 
-@Html.ActionLink("Load Players","LoadPlayers",new {id=Model.Id})
+@Html.ActionLink("Load Users","LoadPlayers",new {id=Model.Id})
+
+@Html.ActionLink("Reload Users","ReloadPlayers",new {id=Model.Id})
 
 <table>
     <thead>
@@ -20,6 +22,7 @@
             <th>Class</th> 
             <th>Race</th> 
             <th>Rank</th> 
+            <th>Last Activity</th> 
         </tr>
     </thead>
     <tbody>

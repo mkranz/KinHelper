@@ -13,9 +13,16 @@ namespace KinHelper.Model.Parsers
             _context = context;
         }
 
+        // TODO:
+
+        // Use: http://my.lotro.com/home/character/crickhollow/aarabeth/activitylog?cl[sf]=date&cl[sd]=ASC instead
+
+        // Faster to just jump to that url and get the activity AND the user id (from in page links)
+        // loading character details page (with stats & equipment is slower!)
+
         public void Update(Character character)
         {
-            var doc = UrlDocument.Get(character);
+            var doc = UrlDocument.Get(character, "activitylog?cl[sf]=date&cl[sd]=ASC");
             if (doc == null)
             {
                 character.HasNoPlayerPage = true;
@@ -62,6 +69,13 @@ namespace KinHelper.Model.Parsers
 
 
                 Console.WriteLine(character.Name + " ---> " + name);
+            }
+
+            // while we're at it, lets log most recent activity
+            var date = doc.DocumentNode.SelectSingleNode("//table[@class='gradient_table activitylog']/tr/td[@class='date']");
+            if (date != null)
+            {
+                character.LastActivityDateString = date.InnerText;
             }
         }
     }
