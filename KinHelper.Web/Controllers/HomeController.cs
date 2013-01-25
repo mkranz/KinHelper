@@ -6,10 +6,10 @@ using System.Web.Mvc;
 
 namespace KinHelper.Web.Controllers
 {
-    public class ImportController : Controller
+    public class HomeController : Controller
     {
         //
-        // GET: /Import/
+        // GET: /Home/
 
         public ActionResult Index()
         {

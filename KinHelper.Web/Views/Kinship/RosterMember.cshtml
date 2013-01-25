@@ -1,9 +1,5 @@
 ﻿@model KinHelper.Model.Entities.KinshipMember
-@{
-    var span = (int?) ViewData["Span"];
-}
-<tr class=@((bool) ViewData["Even"]? "even" : "odd")>
-    
+<tr @((bool) ViewData["Even"]? "even" : "odd")>
     @if (@Model.Character.User == null)
     {
         <td></td>
@@ -11,11 +7,8 @@
     }
     else
     {
-        if (span.HasValue && span.Value > 0)
-        {
-            <td rowspan="@span">@Model.Character.User.HiddenId</td>
-            <td rowspan="@span">@Model.Character.User.Name</td>
-        }
+        <td>@Model.Character.User.HiddenId</td>
+        <td>@Model.Character.User.Name</td>
     }
     <td>@Model.Character.Name</td>
     <td>@Model.Character.Level</td>

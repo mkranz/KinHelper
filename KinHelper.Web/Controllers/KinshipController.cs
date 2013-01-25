@@ -103,8 +103,21 @@ namespace KinHelper.Web.Controllers
 
         public ActionResult CrossKinUsers()
         {
-            //_context.Users.Where(x => _context.Characters.Any(y => y.User == x) && _context.Characters)
-            return null;
+            var users = _context.Users.Where(
+                x =>
+                _context.Members.Where(y => y.Character.User.Id == x.Id).Select(y => y.Kinship.Id).Distinct().Count() >
+                1).ToList();
+
+            return View(users.Select(x => new CrossKinViewModel()
+                                              {
+                                                  User = x,
+                                                  Members = _context.Members.Where(y => y.Character.User.Id == x.Id).ToList()
+                                              }).ToList());
         }
+    }
+    public class CrossKinViewModel
+    {
+        public User User { get; set; }
+        public List<KinshipMember> Members { get; set; }
     }
 }

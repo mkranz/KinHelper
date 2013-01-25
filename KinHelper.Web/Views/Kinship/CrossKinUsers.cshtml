@@ -1,0 +1,50 @@
+﻿@model List<KinHelper.Web.Controllers.CrossKinViewModel>
+
+@{
+    ViewBag.Title = "Cross kin users";
+}
+
+<h2>Cross Kin Users</h2>
+
+<table>
+    <thead>
+        <tr>
+            <th>User Id</th> 
+            <th>User Name</th> 
+            <th>Kinship</th>
+            <th>Name</th> 
+            <th>Level</th> 
+            <th>Class</th> 
+            <th>Race</th> 
+            <th>Rank</th> 
+        </tr>
+    </thead>
+    <tbody>
+        @{
+            var even = true;
+        }
+        @foreach (var user in Model)
+        {
+            var first = true;
+            foreach (var member in user.Members.OrderBy(x => x.Kinship.Id))
+            {
+                <tr>
+                @if (first)
+                {
+                    first = false;
+                        
+                    <td rowspan="@user.Members.Count">@user.User.HiddenId</td>
+                    <td rowspan="@user.Members.Count">@user.User.Name</td>
+                    }
+                    <td>@member.Kinship.Name</td>
+                    <td>@member.Character.Name</td>
+                    <td>@member.Character.Level</td>
+                    <td>@member.Character.Class</td>
+                    <td>@member.Character.Race</td>
+                    <td>@member.Rank</td>
+                </tr>
+            }
+            even = !even;
+        }
+    </tbody>
+</table>

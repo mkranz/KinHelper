@@ -136,7 +136,7 @@
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
-    <Compile Include="Controllers\ImportController.cs" />
+    <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Filters\TimedFilter.cs" />
     <Compile Include="Models\ImportViewModel.cs" />
     <Compile Include="Controllers\KinshipController.cs" />
@@ -181,6 +181,12 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\Kinship\RosterMember.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Kinship\CrossKinUsers.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Home\Index.cshtml" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
