@@ -67,7 +67,6 @@
     <Compile Include="Parsers\CharacterParser.cs" />
     <Compile Include="Parsers\HtmlAgilityPackHelpers.cs" />
     <Compile Include="Parsers\KinshipParser.cs" />
-    <Compile Include="Db\RepositoryInitializer.cs" />
     <Compile Include="Db\KinHelperContext.cs" />
     <Compile Include="Parsers\UrlDocument.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
