@@ -19,7 +19,7 @@ namespace KinHelper.Model.Db
         public DbSet<Character> Characters { get; set; }
         public DbSet<KinshipMember> Members { get; set; }
         public DbSet<User> Users { get; set; }
-
+        
         public Race GetOrCreateRace(string raceString)
         {
             var race = _raceCache.FirstOrDefault(x => x.Name == raceString);

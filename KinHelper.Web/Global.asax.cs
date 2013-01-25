@@ -50,6 +50,17 @@ namespace KinHelper.Web
 
         private static void ConfigureDatabase()
         {
+            var configuration = System.Web.Configuration.WebConfigurationManager.OpenWebConfiguration("~");
+            var connectionString = configuration.ConnectionStrings.ConnectionStrings["KinHelperContext"].ConnectionString;
+            if (!connectionString.Contains("MultipleActiveResultSets=True;"))
+            {
+                connectionString += "MultipleActiveResultSets=True;";
+            }
+
+            configuration.ConnectionStrings.ConnectionStrings["KinHelperContext"].ConnectionString = connectionString;
+            configuration.Save();
+
+
             HibernatingRhinos.Profiler.Appender.EntityFramework.EntityFrameworkProfiler.Initialize();
             Database.SetInitializer(new CreateDatabaseIfNotExists<KinHelperContext>());
         }
